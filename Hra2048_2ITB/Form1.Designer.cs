@@ -33,7 +33,7 @@
             panel1.BackColor = Color.White;
             panel1.Location = new Point(12, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(666, 510);
+            panel1.Size = new Size(1123, 1015);
             panel1.TabIndex = 0;
             // 
             // Form1
@@ -45,6 +45,7 @@
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
+            KeyDown += Form1_KeyDown;
             ResumeLayout(false);
         }
 

@@ -68,5 +68,81 @@ namespace Hra2048_2ITB
             }
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e) {
+            if (e.KeyCode == Keys.Left || e.KeyCode == Keys.A) {
+                MoveNumbers(-1, 0);
+            }
+            if (e.KeyCode == Keys.Right || e.KeyCode == Keys.D) {
+                MoveNumbers(1, 0);
+            }
+            if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W) {
+                MoveNumbers(0, -1);
+            }
+            if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S) {
+                MoveNumbers(0, 1);
+            }
+        }
+
+        private void MoveNumbers(int x, int y) {
+            List<int> nums;
+            if (y == 0) { // horizontal move
+                for (int i = 0; i < size; i++) {
+                    nums = new List<int>();
+                    GetRow(nums, i);
+                    if (x > 0) nums.Reverse();
+                    MergeWhatYouCan(nums);
+                    nums.AddRange(new int[size - nums.Count]);
+                    if (x > 0) nums.Reverse();
+                    ReturnNumbersByRow(nums, i);
+                }
+            } else { // vertical movement
+                for (int i = 0; i < size; i++) {
+                    nums = new List<int>();
+                    GetColumn(nums, i);
+                    if(y > 0) nums.Reverse();
+                    MergeWhatYouCan(nums);
+                    nums.AddRange(new int[size - nums.Count]);
+                    if (y > 0) nums.Reverse();
+                    ReturnNumbersByColumn(nums, i);
+                }
+            }
+        }
+
+        private void ReturnNumbersByRow(List<int> nums, int i) {
+            for (int j = 0; j < size; j++) {
+                numbers[i, j].CurrentValue = nums[j];
+            }
+        }
+
+        private void ReturnNumbersByColumn(List<int> nums, int i) {
+            for (int j = 0; j < size; j++) {
+                numbers[j, i].CurrentValue = nums[j];
+            }
+        }
+
+        private void GetColumn(List<int> nums, int i) {
+            for (int j = 0; j < size; j++) {
+                if (numbers[j, i].CurrentValue > 0) {
+                    nums.Add(numbers[j, i].CurrentValue);
+                }
+            }
+        }
+
+        private void GetRow(List<int> nums, int i) {
+            for (int j = 0; j < size; j++) {
+                if (numbers[i, j].CurrentValue > 0) {
+                    nums.Add(numbers[i, j].CurrentValue);
+                }
+            }
+        }
+
+        private void MergeWhatYouCan(List<int> nums) {
+            for (int i = 0; i < nums.Count - 1; i++) {
+                if (nums[i] == nums[i + 1]) {
+                    nums[i] *= 2;
+                    nums.RemoveAt(i + 1);
+                }
+            }
+        }
     }
 }
