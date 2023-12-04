@@ -26,31 +26,44 @@
         /// </summary>
         private void InitializeComponent() {
             panel1 = new Panel();
+            label1 = new Label();
             SuspendLayout();
             // 
             // panel1
             // 
             panel1.BackColor = Color.White;
-            panel1.Location = new Point(12, 12);
+            panel1.Location = new Point(12, 47);
             panel1.Name = "panel1";
             panel1.Size = new Size(1123, 1015);
             panel1.TabIndex = 0;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(12, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(60, 25);
+            label1.TabIndex = 1;
+            label1.Text = "Score:";
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 1124);
+            Controls.Add(label1);
             Controls.Add(panel1);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             KeyDown += Form1_KeyDown;
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private Panel panel1;
+        private Label label1;
     }
 }

@@ -1,3 +1,5 @@
+using static System.Formats.Asn1.AsnWriter;
+
 namespace Hra2048_2ITB
 {
     public partial class Form1 : Form
@@ -6,11 +8,21 @@ namespace Hra2048_2ITB
         Number[,] numbers;
         Random generator = new Random();
 
+        int score = 0;
+
+        int Score {
+            get { return score; }
+            set {
+                score = value;
+                label1.Text = "Score: " + score;
+            }
+        }
+
         int[,] test = new int[4, 4] {
-            { 2, 2, 2, 2 },
-            { 2, 2, 4, 0 },
-            { 16, 16, 4, 0 },
-            { 0, 0, 4, 4 },
+            { 2, 4, 2, 4 },
+            { 4, 2, 4, 2 },
+            { 2, 4, 8, 4 },
+            { 4, 2, 2, 8 },
         };
 
         public Form1() {
@@ -22,7 +34,7 @@ namespace Hra2048_2ITB
             SetupSizes();
             GenerateStart();
 
-            //SetupTest();
+            SetupTest();
         }
 
         private void CreateNumbers() {
@@ -42,7 +54,7 @@ namespace Hra2048_2ITB
             int numberSize = numbers[0, 0].Width;
 
             panel1.Size = new Size(numberSize * size, numberSize * size);
-            this.Size = new Size(panel1.Width + 48, panel1.Height + 80);
+            this.Size = new Size(panel1.Width + 48, panel1.Height + 110);
         }
 
         private void GenerateStart() {
@@ -61,17 +73,27 @@ namespace Hra2048_2ITB
         private bool MergeIsPossible() {
             if (ExistsEmptyNumber()) return true;
 
-            for(int i = 0; i < size - 1; i++) {
-                for(int j = 0; j < size - 1; j++) {
-                    if (numbers[i,j].CurrentValue == numbers[i + 1, j].CurrentValue) {
-                        return true; 
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size; j++) {
+
+                    if (IsInArray(i + 1, j)) {
+                        if (numbers[i, j].CurrentValue == numbers[i + 1, j].CurrentValue) {
+                            return true;
+                        }
                     }
-                    if (numbers[i, j].CurrentValue == numbers[i, j + 1].CurrentValue) {
-                        return true;
+
+                    if (IsInArray(i, j + 1)) {
+                        if (numbers[i, j].CurrentValue == numbers[i, j + 1].CurrentValue) {
+                            return true;
+                        }
                     }
                 }
             }
             return false;
+        }
+
+        private bool IsInArray(int i, int j) {
+            return i < size && j < size;
         }
 
         private void AddNewNumber() {
@@ -109,7 +131,7 @@ namespace Hra2048_2ITB
                 MoveNumbers(0, 1);
             }
             AddNewNumber();
-            if(!MergeIsPossible()) {
+            if (!MergeIsPossible()) {
                 MessageBox.Show("Prohráls!");
             }
         }
@@ -130,7 +152,7 @@ namespace Hra2048_2ITB
                 for (int i = 0; i < size; i++) {
                     nums = new List<int>();
                     GetColumn(nums, i);
-                    if(y > 0) nums.Reverse();
+                    if (y > 0) nums.Reverse();
                     MergeWhatYouCan(nums);
                     nums.AddRange(new int[size - nums.Count]);
                     if (y > 0) nums.Reverse();
@@ -171,6 +193,7 @@ namespace Hra2048_2ITB
             for (int i = 0; i < nums.Count - 1; i++) {
                 if (nums[i] == nums[i + 1]) {
                     nums[i] *= 2;
+                    Score += nums[i];
                     nums.RemoveAt(i + 1);
                 }
             }
