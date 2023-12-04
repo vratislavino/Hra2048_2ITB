@@ -22,7 +22,7 @@ namespace Hra2048_2ITB
             SetupSizes();
             GenerateStart();
 
-            SetupTest();
+            //SetupTest();
         }
 
         private void CreateNumbers() {
@@ -50,7 +50,34 @@ namespace Hra2048_2ITB
             AddNewNumber();
         }
 
+        private bool ExistsEmptyNumber() {
+            foreach (Number number in numbers) {
+                if (number.CurrentValue == 0)
+                    return true;
+            }
+            return false;
+        }
+
+        private bool MergeIsPossible() {
+            if (ExistsEmptyNumber()) return true;
+
+            for(int i = 0; i < size - 1; i++) {
+                for(int j = 0; j < size - 1; j++) {
+                    if (numbers[i,j].CurrentValue == numbers[i + 1, j].CurrentValue) {
+                        return true; 
+                    }
+                    if (numbers[i, j].CurrentValue == numbers[i, j + 1].CurrentValue) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         private void AddNewNumber() {
+            if (!ExistsEmptyNumber())
+                return;
+
             int x, y;
             do {
                 x = generator.Next(0, size);
@@ -80,6 +107,10 @@ namespace Hra2048_2ITB
             }
             if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S) {
                 MoveNumbers(0, 1);
+            }
+            AddNewNumber();
+            if(!MergeIsPossible()) {
+                MessageBox.Show("Prohráls!");
             }
         }
 
